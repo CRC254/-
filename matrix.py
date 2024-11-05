@@ -111,7 +111,6 @@ class Matrix(object):# 矩阵类
     def rank(self):#秩
         if(self.n>self.m):
             self = self.trun()
-        rk = self.n
         row = 0
         for i in range(self.n):
             k = row
@@ -120,13 +119,26 @@ class Matrix(object):# 矩阵类
                     k = j
             self.matrix[row], self.matrix[k] = self.matrix[k], self.matrix[row]
             if(self.matrix[row][i] == 0):
-                rk -= 1
-                if(rk == 0):
-                    return 0
+                continue
             else:
                 for j in range(row + 1,self.n):
                     temp = self.matrix[j][i] / self.matrix[row][i]
                     for t in range(i,self.n):
                         self.matrix[j][t] -= self.matrix[row][t] * temp
                 row += 1
-        return rk
+                if(row == self.n):
+                    return row
+        return row
+
+
+    def print_m(self):#打印矩阵
+        for i in range(self.n):
+            print(self.matrix[i])
+
+
+mat = Matrix(3,2,[[1,2],[3,4],[2,4]])#请输入一个矩阵
+mat.print_m()
+print(mat.rank())
+tam = mat.trun()
+tam.print_m()
+print(tam.rank())
