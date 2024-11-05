@@ -1,0 +1,57 @@
+{
+  "options": {
+    "env": {//环境变量
+      "Path": "C:\\mingw64\\bin;${env:Path}"
+    }
+  },
+  "tasks": [
+    {
+      "args": [//传递给命令的参数列表
+        "-g",//生成调试信息
+        "${file}",//当前打开的文件夹
+        "-o",//指定输出文件的名称
+        "${fileDirname}\\${fileBasenameNoExtension}.exe",//输出文件的路径和名称，这里当前文件所在目录，指去拓展名加exe
+        "-std=c++17"//c++标准
+      ],
+      "command": "C:\\mingw64\\bin\\g++.exe",
+      "group": {
+        "isDefault": true,//如果有多个任务都被设置为默认，那么第一个被设置为默认的任务将被视为真正的默认任务
+        "kind": "build"//任务种类，这里表示生成任务
+      },
+      "label": "single file build",//任务标签
+      "presentation": {//显示选项
+        "clear": true,
+        "echo": false,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "silent",
+        "showReuseMessage": false
+      },
+      "problemMatcher": "$gcc",//$gcc问题匹配器
+      "type": "process"//作为进程运行
+    },
+    {
+      "args": [],
+      "command": "${fileDirname}\\${fileBasenameNoExtension}.exe",//运行“之前生成的”文件
+      "dependsOn": "single file build",//指定这个任务依赖的其他任务，这里表示在运行可执行文件之前必须先构建它
+      "label": "run and pause",//任务标签
+      "options": {
+        "cwd": "${fileDirname}",
+        "env": {//环境变量，与顶层options相同
+          "Path": "C:\\mingw64\\bin;${env:Path}"
+        }
+      },
+      "presentation": {
+        "clear": true,
+        "echo": false,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "never",
+        "showReuseMessage": false
+      },
+      "problemMatcher": [],//定义如何从任务输出中识别和处理问题，问题可以是错误、警告或其他诊断信息
+      "type": "pause-console"//让终端暂不关闭
+    }
+  ],
+  "version": "2.0.0"//版本号
+}
